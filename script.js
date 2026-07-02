@@ -1,6 +1,19 @@
 (() => {
   'use strict';
 
+  // Disable pinch-to-zoom (iOS Safari ignores user-scalable=no in some versions)
+  document.addEventListener('gesturestart', (e) => e.preventDefault());
+  document.addEventListener('gesturechange', (e) => e.preventDefault());
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  let lastTapTime = 0;
+  document.addEventListener('touchend', (e) => {
+    const now = Date.now();
+    if (now - lastTapTime <= 300) e.preventDefault(); // block double-tap zoom
+    lastTapTime = now;
+  }, { passive: false });
+
   const preloader = document.getElementById('preloader');
   const preloaderFill = document.getElementById('preloaderFill');
   const preloaderPct = document.getElementById('preloaderPct');
@@ -171,6 +184,39 @@
       searchToggle.setAttribute('aria-expanded', 'false');
     }
   });
+
+  // Mobile menu search (shown inside the hamburger dropdown on small screens)
+  const mobileSearchInput = document.getElementById('mobileSearchInput');
+  if (mobileSearchInput) {
+    mobileSearchInput.addEventListener('input', () => {
+      const q = mobileSearchInput.value.trim().toLowerCase();
+      searchCourseCards.forEach(card => {
+        if (!q) { card.style.display = ''; return; }
+        const title = card.querySelector('.course-title')?.textContent.toLowerCase() || '';
+        const cat = (card.dataset.cat || '').toLowerCase();
+        const desc = (card.dataset.desc || '').toLowerCase();
+        const match = title.includes(q) || cat.includes(q) || desc.includes(q);
+        card.style.display = match ? '' : 'none';
+      });
+    });
+    mobileSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        navLinks.classList.remove('open');
+        burger.classList.remove('open');
+      }
+    });
+  }
+  const mobileLoginTrigger = document.getElementById('mobileLoginTrigger');
+  if (mobileLoginTrigger) {
+    mobileLoginTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      navLinks.classList.remove('open');
+      burger.classList.remove('open');
+      openAuthModal('login');
+    });
+  }
 
   const MODAL_IDS = ['authModal', 'courseModal', 'coursesModalOverlay', 'categoriesModalOverlay'];
   function lockBodyScroll() {
@@ -513,6 +559,44 @@
 
     track.addEventListener('mouseenter', () => clearInterval(autoTimer));
     track.addEventListener('mouseleave', restartAuto);
+
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchCurrentX = 0;
+    let isDragging = false;
+
+    track.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchCurrentX = touchStartX;
+      isDragging = true;
+      clearInterval(autoTimer);
+      track.style.transition = 'none';
+    }, { passive: true });
+
+    track.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      touchCurrentX = e.touches[0].clientX;
+      const dx = touchCurrentX - touchStartX;
+      const cardWidth = cards[0].getBoundingClientRect().width;
+      const gap = 24;
+      const base = -(index * (cardWidth + gap));
+      track.style.transform = `translateX(${base + dx}px)`;
+    }, { passive: true });
+
+    track.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      track.style.transition = '';
+      const dx = touchCurrentX - touchStartX;
+      const threshold = 40;
+      if (dx < -threshold) {
+        index = Math.min(index + 1, maxIndex());
+      } else if (dx > threshold) {
+        index = Math.max(index - 1, 0);
+      }
+      update();
+      restartAuto();
+    });
   }
 
   function relLuminance(r, g, b) {

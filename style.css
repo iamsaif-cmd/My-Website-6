@@ -62,6 +62,9 @@ input, textarea{
   -webkit-touch-callout:default;
 }
 
+html{
+  overflow-x:hidden;
+}
 body{
   margin:0;
   background:var(--cream);
@@ -70,8 +73,10 @@ body{
   font-size:16px;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+  tap-highlight-color:transparent;
 }
+*{ -webkit-tap-highlight-color:transparent; }
 
 img,svg{ display:block; max-width:100%; }
 a{ color:inherit; text-decoration:none; }
@@ -596,7 +601,7 @@ h1,h2,h3,h4{
 .promo-mid h2{ font-size:clamp(26px,3.4vw,38px); margin-bottom:14px; }
 .promo-mid p.sub{ color:var(--ink-soft); max-width:420px; margin:0 auto 26px; font-size:15px; }
 
-.testi-track-wrap{ overflow:hidden; }
+.testi-track-wrap{ overflow:hidden; touch-action:pan-y; }
 .testi-track{ display:flex; gap:24px; transition:transform .6s var(--ease); }
 .testi-card{
   flex:0 0 calc(25% - 18px);
@@ -904,6 +909,27 @@ footer{ background:var(--moss-deep-2); color:rgba(255,255,255,.82); padding:80px
   .nav-actions .login-link{ display:none; }
   .burger{ display:flex; }
   .nav-search{ display:none; }
+  .nav-links::after{
+    content:"";
+    display:block;
+    width:100%;
+    padding-top:15px;
+  }
+  .nav-links .mobile-login-link{
+    display:block; width:100%; padding:15px 0 0;
+    font-weight:600; font-size:15px; color:var(--ink);
+  }
+  .nav-links .mobile-search-wrap{
+    width:100%; padding:15px 0 0;
+  }
+  .nav-links .mobile-search-wrap input{
+    width:100%; box-sizing:border-box; padding:12px 14px;
+    border:1.5px solid var(--line); border-radius:12px;
+    font-family:inherit; font-size:14.5px; background:var(--cream);
+  }
+}
+@media (min-width:881px){
+  .mobile-login-link, .mobile-search-wrap{ display:none; }
 }
 
 @media (max-width:760px){
