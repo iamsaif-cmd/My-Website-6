@@ -87,6 +87,11 @@
     const open = navLinks.classList.toggle('open');
     burger.classList.toggle('open', open);
     burger.setAttribute('aria-expanded', open);
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      unlockBodyScrollIfNoneOpen();
+    }
   });
   const navAnchorEls = Array.from(navLinks.querySelectorAll('a'));
 
@@ -104,6 +109,7 @@
     a.addEventListener('click', () => {
       navLinks.classList.remove('open');
       burger.classList.remove('open');
+      unlockBodyScrollIfNoneOpen();
       navAnchorEls.forEach(link => link.classList.remove('active'));
       a.classList.add('active');
       armSpySuppression();
@@ -205,6 +211,7 @@
         document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         navLinks.classList.remove('open');
         burger.classList.remove('open');
+        unlockBodyScrollIfNoneOpen();
       }
     });
   }
@@ -214,6 +221,7 @@
       e.preventDefault();
       navLinks.classList.remove('open');
       burger.classList.remove('open');
+      unlockBodyScrollIfNoneOpen();
       openAuthModal('login');
     });
   }
@@ -223,7 +231,8 @@
     document.body.style.overflow = 'hidden';
   }
   function unlockBodyScrollIfNoneOpen() {
-    const stillOpen = MODAL_IDS.some(id => {
+    const navOpen = navLinks.classList.contains('open');
+    const stillOpen = navOpen || MODAL_IDS.some(id => {
       const el = document.getElementById(id);
       return el && el.classList.contains('open');
     });

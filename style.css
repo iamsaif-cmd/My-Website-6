@@ -177,11 +177,16 @@ h1,h2,h3,h4{
 
 .nav{
   position:sticky; top:0; z-index:100;
+  border-bottom:1px solid transparent;
+  transition:border-color .35s, box-shadow .35s;
+}
+.nav::before{
+  content:"";
+  position:absolute; inset:0;
   background:rgba(251,247,238,.82);
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
-  border-bottom:1px solid transparent;
-  transition:border-color .35s, box-shadow .35s, background .35s;
+  z-index:-1;
 }
 .nav.scrolled{ border-color:var(--line); box-shadow:0 10px 30px -22px rgba(24,38,32,.4); }
 .nav-inner{
@@ -895,6 +900,7 @@ footer{ background:var(--moss-deep-2); color:rgba(255,255,255,.82); padding:80px
 @media (max-width:880px){
   .nav-links{
     position:fixed; top:78px; left:0; right:0; bottom:0;
+    z-index:5;
     background:var(--cream);
     flex-direction:column; align-items:flex-start; gap:0;
     padding:14px 26px 30px;
