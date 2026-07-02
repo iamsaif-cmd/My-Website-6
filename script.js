@@ -77,6 +77,19 @@
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  // Keep the mobile menu's top offset in sync with the *real* header height
+  // (it changes across breakpoints/fonts), so it never overlaps or crops the nav.
+  function updateNavHeight() {
+    document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+  }
+  updateNavHeight();
+  window.addEventListener('resize', updateNavHeight);
+  window.addEventListener('orientationchange', updateNavHeight);
+  window.addEventListener('load', updateNavHeight);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(updateNavHeight).catch(() => {});
+  }
+
   toTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -88,7 +101,8 @@
     burger.classList.toggle('open', open);
     burger.setAttribute('aria-expanded', open);
     if (open) {
-      document.body.style.overflow = 'hidden';
+      updateNavHeight();
+      lockBodyScroll();
     } else {
       unlockBodyScrollIfNoneOpen();
     }
@@ -148,6 +162,31 @@
   const searchToggle = document.getElementById('searchToggle');
   const navSearchInput = document.getElementById('navSearchInput');
   const searchCourseCards = document.querySelectorAll('.course-card');
+  const coursesGridEmptyState = document.getElementById('coursesGridEmptyState');
+
+  // Shared filter: runs the query against every course card's title/category/description.
+  // Returns how many cards matched, so callers can show/hide the empty state.
+  function filterCourseCards(rawQuery) {
+    const q = rawQuery.trim().toLowerCase();
+    let visibleCount = 0;
+    searchCourseCards.forEach(card => {
+      if (!q) { card.style.display = ''; visibleCount++; return; }
+      const title = card.querySelector('.course-title')?.textContent.toLowerCase() || '';
+      const cat = (card.dataset.cat || '').toLowerCase();
+      const desc = (card.dataset.desc || '').toLowerCase();
+      const match = title.includes(q) || cat.includes(q) || desc.includes(q);
+      card.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+    if (coursesGridEmptyState) {
+      coursesGridEmptyState.style.display = (q && visibleCount === 0) ? 'block' : 'none';
+    }
+    return visibleCount;
+  }
+
+  function jumpToCourses() {
+    document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   function openSearch() {
     navSearch.classList.add('open');
@@ -159,7 +198,7 @@
     searchToggle.setAttribute('aria-expanded', 'false');
     navSearchInput.value = '';
     navSearchInput.blur();
-    searchCourseCards.forEach(card => { card.style.display = ''; });
+    filterCourseCards('');
   }
   searchToggle.addEventListener('click', () => {
     if (navSearch.classList.contains('open')) closeSearch();
@@ -171,21 +210,22 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && navSearch.classList.contains('open')) closeSearch();
   });
+
+  let navSearchJumped = false;
   navSearchInput.addEventListener('input', () => {
-    const q = navSearchInput.value.trim().toLowerCase();
-    searchCourseCards.forEach(card => {
-      if (!q) { card.style.display = ''; return; }
-      const title = card.querySelector('.course-title')?.textContent.toLowerCase() || '';
-      const cat = (card.dataset.cat || '').toLowerCase();
-      const desc = (card.dataset.desc || '').toLowerCase();
-      const match = title.includes(q) || cat.includes(q) || desc.includes(q);
-      card.style.display = match ? '' : 'none';
-    });
+    const count = filterCourseCards(navSearchInput.value);
+    // Jump to the results the first time this query starts returning matches,
+    // so typing actually shows something instead of filtering off-screen cards.
+    if (navSearchInput.value.trim() && count > 0 && !navSearchJumped) {
+      navSearchJumped = true;
+      jumpToCourses();
+    }
+    if (!navSearchInput.value.trim()) navSearchJumped = false;
   });
   navSearchInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      jumpToCourses();
       navSearch.classList.remove('open');
       searchToggle.setAttribute('aria-expanded', 'false');
     }
@@ -195,23 +235,16 @@
   const mobileSearchInput = document.getElementById('mobileSearchInput');
   if (mobileSearchInput) {
     mobileSearchInput.addEventListener('input', () => {
-      const q = mobileSearchInput.value.trim().toLowerCase();
-      searchCourseCards.forEach(card => {
-        if (!q) { card.style.display = ''; return; }
-        const title = card.querySelector('.course-title')?.textContent.toLowerCase() || '';
-        const cat = (card.dataset.cat || '').toLowerCase();
-        const desc = (card.dataset.desc || '').toLowerCase();
-        const match = title.includes(q) || cat.includes(q) || desc.includes(q);
-        card.style.display = match ? '' : 'none';
-      });
+      filterCourseCards(mobileSearchInput.value);
     });
     mobileSearchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         navLinks.classList.remove('open');
         burger.classList.remove('open');
         unlockBodyScrollIfNoneOpen();
+        // wait for the menu-close transition so scrollIntoView measures the final layout
+        window.setTimeout(jumpToCourses, 260);
       }
     });
   }
@@ -227,8 +260,17 @@
   }
 
   const MODAL_IDS = ['authModal', 'courseModal', 'coursesModalOverlay', 'categoriesModalOverlay'];
+  let bodyScrollLocked = false;
+  let savedScrollY = 0;
   function lockBodyScroll() {
-    document.body.style.overflow = 'hidden';
+    if (bodyScrollLocked) return;
+    bodyScrollLocked = true;
+    savedScrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = -savedScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
   }
   function unlockBodyScrollIfNoneOpen() {
     const navOpen = navLinks.classList.contains('open');
@@ -236,7 +278,14 @@
       const el = document.getElementById(id);
       return el && el.classList.contains('open');
     });
-    if (!stillOpen) document.body.style.overflow = '';
+    if (stillOpen || !bodyScrollLocked) return;
+    bodyScrollLocked = false;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, savedScrollY);
   }
 
   const authModal = document.getElementById('authModal');
