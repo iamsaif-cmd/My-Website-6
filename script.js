@@ -113,7 +113,7 @@
   const navSections = navAnchorEls
     .map(a => {
       const id = a.getAttribute('href');
-      if (!id || !id.startsWith('#')) return null;
+      if (!id || id.length < 2 || !id.startsWith('#')) return null;
       const section = document.querySelector(id);
       return section ? { link: a, section } : null;
     })
