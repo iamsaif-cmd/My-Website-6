@@ -209,7 +209,7 @@ h1,h2,h3,h4{
 .logo:hover .logo-mark{ transform:rotate(4deg) scale(1.05); }
 .logo-mark svg{ width:20px; height:20px; }
 
-.nav-links{ display:flex; align-items:center; gap:38px; }
+.nav-links{ display:flex; align-items:center; gap:38px; max-width:1240px; width:100%; margin:0 auto; padding:0 32px; box-sizing:border-box; }
 .nav-links a{
   font-weight:600; font-size:14.5px; color:var(--ink-soft);
   position:relative; padding:6px 0;
@@ -904,6 +904,7 @@ footer{ background:var(--moss-deep-2); color:rgba(255,255,255,.82); padding:80px
     z-index:5;
     background:var(--cream);
     flex-direction:column; align-items:flex-start; gap:0;
+    max-width:none; width:auto; margin:0;
     padding:14px 26px 30px;
     transform:translateY(-12px); opacity:0; pointer-events:none;
     transition:opacity .35s var(--ease), transform .35s var(--ease);
@@ -1053,6 +1054,9 @@ footer{ background:var(--moss-deep-2); color:rgba(255,255,255,.82); padding:80px
 .auth-form[hidden]{ display:none !important; }
 @keyframes authFormIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
 .auth-field{ display:flex; flex-direction:column; gap:5px; font-size:11.5px; font-weight:700; color:var(--ink-soft); letter-spacing:.02em; }
+.auth-msg{ font-size:12.5px; font-weight:600; padding:10px 14px; border-radius:10px; line-height:1.4; }
+.auth-msg-error{ background:#FDEBEA; color:#B3261E; border:1px solid #F3C6C3; }
+.auth-msg-success{ background:var(--moss-soft); color:var(--moss-deep); border:1px solid rgba(31,64,50,.18); }
 .auth-field input{
   font-family:inherit; font-size:13.5px; color:var(--ink);
   padding:9px 13px; border-radius:11px; border:1.5px solid var(--line);
@@ -1212,4 +1216,76 @@ footer{ background:var(--moss-deep-2); color:rgba(255,255,255,.82); padding:80px
   .courses-modal-header{ padding:18px; }
   .courses-modal-tabs{ padding:14px 18px; }
   .courses-modal-body{ padding:18px 18px 26px; }
+}
+
+/* ═══════════════════════════════════════════════
+   CONTACT SECTION
+   ═══════════════════════════════════════════════ */
+.contact-section{ padding:80px 0; background:var(--paper); }
+.contact-inner{
+  display:grid;
+  grid-template-columns:1fr 1.4fr;
+  gap:64px;
+  align-items:start;
+}
+.contact-info h2{ margin:12px 0 16px; }
+.contact-sub{ color:var(--ink-soft); font-size:15px; line-height:1.65; margin-bottom:32px; }
+.contact-detail-list{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:16px; }
+.contact-detail-list li{
+  display:flex; align-items:center; gap:14px;
+  font-size:14.5px; color:var(--ink-soft);
+}
+.contact-icon{
+  width:36px; height:36px; border-radius:10px;
+  background:var(--moss-soft); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.contact-icon svg{ width:16px; height:16px; stroke:var(--moss-deep); }
+
+/* Form */
+.contact-form{
+  background:var(--cream); border:1px solid var(--line);
+  border-radius:var(--radius-lg); padding:36px;
+  display:flex; flex-direction:column; gap:22px;
+}
+.contact-row{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.contact-field{ display:flex; flex-direction:column; gap:7px; }
+.contact-field label{ font-size:13.5px; font-weight:600; color:var(--ink); }
+.contact-field input,
+.contact-field textarea{
+  padding:11px 14px;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  font-family:inherit; font-size:14.5px;
+  background:var(--paper); color:var(--ink);
+  transition:border-color .2s;
+  resize:none;
+}
+.contact-field input:focus,
+.contact-field textarea:focus{
+  outline:none;
+  border-color:var(--moss-deep);
+}
+.contact-field input::placeholder,
+.contact-field textarea::placeholder{ color:var(--ink-muted, #aaa); }
+.contact-msg{
+  font-size:14px; border-radius:8px;
+  padding:10px 14px; margin:0;
+}
+.contact-msg-success{ background:#edf7ed; color:#1e6e28; }
+.contact-msg-error{ background:#fdecea; color:#b91c1c; }
+
+/* Newsletter messages */
+.news-msg{
+  font-size:13.5px; margin-top:10px;
+  padding:9px 14px; border-radius:8px;
+}
+.news-msg-success{ background:#edf7ed; color:#1e6e28; }
+.news-msg-error{ background:#fdecea; color:#b91c1c; }
+.news-msg-info{ background:#fef9ec; color:#92600a; }
+
+@media (max-width:860px){
+  .contact-inner{ grid-template-columns:1fr; gap:40px; }
+  .contact-row{ grid-template-columns:1fr; }
+  .contact-form{ padding:26px 22px; }
 }

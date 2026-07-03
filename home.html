@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en" class="is-loading">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Education Hub — Learn a skill that ships</title>
+<meta name="description" content="Education Hub — learn design, development, marketing, photography and more with courses built by working practitioners.">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* ================= HOME PAGE — bespoke additions ================= */
+  .home-hero{
+    position:relative;
+    padding:64px 0 40px;
+    overflow:hidden;
+  }
+  .home-hero-inner{
+    display:grid;
+    grid-template-columns:1.08fr .92fr;
+    gap:52px;
+    align-items:center;
+  }
+  .kinetic-head{
+    font-size:clamp(42px, 5.6vw, 72px);
+    letter-spacing:-.015em;
+  }
+  .kinetic-head .rotor{
+    position:relative;
+    display:inline-block;
+    color:var(--amber-deep);
+    font-style:italic;
+    min-width:1ch;
+  }
+  .kinetic-head .rotor .word{
+    display:inline-block;
+    transform:translateY(0.15em);
+    opacity:0;
+    animation:rotorIn .6s var(--ease) forwards;
+  }
+  @keyframes rotorIn{
+    0%{ opacity:0; transform:translateY(.3em) rotate(2deg); }
+    100%{ opacity:1; transform:translateY(0) rotate(0); }
+  }
+  .home-hero p.lede{
+    margin:26px 0 36px;
+    font-size:18px;
+    color:var(--ink-soft);
+    max-width:480px;
+  }
+  .home-cta-row{ display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin-bottom:44px; }
+
+  .trust-row{
+    display:flex; align-items:center; gap:22px;
+    padding-top:26px;
+    border-top:1px solid var(--line);
+  }
+  .trust-row .stack-avatar img{ width:38px; height:38px; border-radius:50%; border:3px solid var(--cream); object-fit:cover; margin-left:-12px; }
+  .trust-row .stack-avatar:first-child img{ margin-left:0; }
+  .trust-row-copy strong{ display:block; font-family:'Fraunces',serif; font-size:15px; }
+  .trust-row-copy span{ font-size:13px; color:var(--ink-soft); }
+  .trust-row-stars{ display:flex; gap:2px; }
+  .trust-row-stars svg{ width:13px; height:13px; fill:var(--gold); }
+
+  /* --- Signature visual: tilting syllabus stack --- */
+  .stack-stage{
+    position:relative;
+    height:520px;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1600px;
+  }
+  .stack-glow{
+    position:absolute; width:340px; height:340px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,122,61,.20), rgba(255,122,61,0) 70%);
+    filter:blur(4px);
+  }
+  .stack-3d{
+    position:relative;
+    width:320px; height:400px;
+    transform-style:preserve-3d;
+    transition:transform .15s ease-out;
+  }
+  .stack-card{
+    position:absolute; inset:0;
+    border-radius:20px;
+    box-shadow:0 30px 60px -30px rgba(24,38,32,.45);
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:26px;
+    backface-visibility:hidden;
+  }
+  .stack-card .sc-top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .stack-card .sc-badge{
+    width:40px; height:40px; border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .stack-card .sc-badge svg{ width:20px; height:20px; }
+  .stack-card .sc-pct{ font-family:'Space Mono',monospace; font-size:12px; }
+  .stack-card h4{ font-size:20px; line-height:1.2; }
+  .stack-card .sc-bar{ height:6px; border-radius:99px; background:rgba(0,0,0,.08); overflow:hidden; }
+  .stack-card .sc-bar-fill{ height:100%; border-radius:99px; }
+  .stack-card .sc-foot{ display:flex; justify-content:space-between; font-size:12px; }
+
+  .stack-card.c1{ background:var(--moss-deep); color:var(--cream); transform:translateZ(-40px) translate(18px,26px) rotate(-4deg); }
+  .stack-card.c1 .sc-badge{ background:rgba(255,255,255,.12); }
+  .stack-card.c1 .sc-pct{ color:var(--moss); }
+  .stack-card.c1 .sc-foot{ color:rgba(251,247,238,.65); }
+  .stack-card.c1 .sc-bar{ background:rgba(255,255,255,.14); }
+  .stack-card.c1 .sc-bar-fill{ background:var(--gold); width:38%; }
+
+  .stack-card.c2{ background:var(--gold); color:var(--ink); transform:translateZ(-14px) translate(-14px,-14px) rotate(3deg); }
+  .stack-card.c2 .sc-badge{ background:rgba(24,38,32,.1); }
+  .stack-card.c2 .sc-pct{ color:var(--ink-soft); }
+  .stack-card.c2 .sc-foot{ color:var(--ink-soft); }
+  .stack-card.c2 .sc-bar{ background:rgba(24,38,32,.12); }
+  .stack-card.c2 .sc-bar-fill{ background:var(--amber-deep); width:71%; }
+
+  .stack-card.c3{ background:var(--paper); color:var(--ink); transform:translateZ(10px) rotate(-1.5deg); border:1px solid var(--line); }
+  .stack-card.c3 .sc-badge{ background:var(--moss-soft); }
+  .stack-card.c3 .sc-pct{ color:var(--amber-deep); }
+  .stack-card.c3 .sc-foot{ color:var(--ink-soft); }
+  .stack-card.c3 .sc-bar{ background:var(--line-soft); }
+  .stack-card.c3 .sc-bar-fill{ background:var(--moss-deep); width:92%; }
+
+  .stack-pin{
+    position:absolute; top:-14px; right:38px;
+    background:var(--paper); border-radius:16px; box-shadow:var(--shadow);
+    padding:10px 16px; display:flex; align-items:center; gap:9px;
+    font-size:12.5px; font-weight:700;
+    animation:floaty 5.2s ease-in-out infinite;
+  }
+  .stack-pin .dot{ width:8px; height:8px; border-radius:50%; background:#3EBD6B; }
+
+  /* --- process --- */
+  .process{ padding:80px 0; }
+  .process-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:48px; }
+  .process-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius-lg);
+    padding:34px 28px; position:relative; overflow:hidden;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+  }
+  .process-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow); border-color:transparent; }
+  .process-num{
+    font-family:'Fraunces',serif; font-style:italic; font-size:52px; color:var(--line);
+    line-height:1; margin-bottom:18px;
+    transition:color .35s var(--ease), transform .35s var(--ease);
+  }
+  .process-card:hover .process-num{ color:var(--amber-deep); transform:translateY(-3px); }
+  .process-card h3{ font-size:20px; margin-bottom:10px; }
+  .process-card p{ color:var(--ink-soft); font-size:14.5px; }
+  .process-card::after{
+    content:''; position:absolute; top:0; right:0; width:70px; height:70px;
+    background:var(--moss-soft); border-radius:0 0 0 100%; opacity:.7;
+    transition:transform .4s var(--ease);
+  }
+  .process-card:hover::after{ transform:scale(1.15); }
+  .process-card:nth-child(2)::after{ background:#FFEFE4; }
+  .process-card:nth-child(3)::after{ background:#F3E9F7; }
+
+  /* --- category strip --- */
+  .cat-strip-wrap{ padding:80px 0; background:var(--moss-deep); position:relative; overflow:hidden; }
+  .cat-strip-wrap .section-head h2, .cat-strip-wrap .eyebrow{ color:var(--cream); }
+  .cat-strip-wrap .eyebrow{ color:var(--gold); }
+  .cat-strip-wrap .eyebrow::before{ background:var(--gold); }
+  .cat-strip-wrap .section-head p{ color:rgba(251,247,238,.65); }
+  .cat-strip{
+    display:flex; gap:16px; overflow-x:auto; padding:10px 2px 14px;
+    scrollbar-width:none;
+  }
+  .cat-strip::-webkit-scrollbar{ display:none; }
+  .cat-chip{
+    flex:0 0 auto;
+    background:rgba(251,247,238,.06);
+    border:1px solid rgba(251,247,238,.14);
+    border-radius:999px;
+    padding:14px 24px;
+    display:flex; align-items:center; gap:10px;
+    color:var(--cream); font-weight:600; font-size:14.5px;
+    transition:background .3s, border-color .3s, transform .3s var(--ease);
+  }
+  .cat-chip:hover{ background:rgba(251,247,238,.12); border-color:var(--gold); transform:translateY(-3px); }
+  .cat-chip svg{ width:16px; height:16px; }
+
+  /* --- testimonial spotlight --- */
+  .spotlight{ padding:90px 0; }
+  .spotlight-card{
+    background:var(--paper); border-radius:var(--radius-lg); border:1px solid var(--line);
+    padding:64px; display:grid; grid-template-columns:.7fr 1.3fr; gap:50px; align-items:center;
+    position:relative; overflow:hidden;
+  }
+  .spotlight-quote-mark{ font-family:'Fraunces',serif; font-size:120px; color:var(--moss-soft); line-height:.6; position:absolute; top:34px; left:40px; }
+  .spotlight-photo{ position:relative; z-index:1; }
+  .spotlight-photo img{ width:100%; aspect-ratio:1; object-fit:cover; border-radius:22px; }
+  .spotlight-photo .sp-tag{
+    position:absolute; bottom:-16px; left:-16px; background:var(--amber); color:#fff;
+    padding:10px 16px; border-radius:14px; font-weight:700; font-size:13px; box-shadow:var(--shadow-sm);
+  }
+  .spotlight-copy{ position:relative; z-index:1; }
+  .spotlight-copy blockquote{
+    font-family:'Fraunces',serif; font-style:italic; font-weight:500;
+    font-size:clamp(22px,2.4vw,30px); line-height:1.4; margin:0 0 26px;
+  }
+  .spotlight-copy .sp-name strong{ display:block; font-size:15px; }
+  .spotlight-copy .sp-name span{ font-size:13.5px; color:var(--ink-soft); }
+
+  /* --- cta band --- */
+  .cta-band{
+    position:relative;
+    margin:0 0 90px;
+    box-sizing:border-box;
+    overflow:visible;
+  }
+  .cta-band::before, .cta-band::after{
+    content:'';
+    position:absolute;
+    border-radius:50%;
+    filter:blur(70px);
+    z-index:0;
+    opacity:.55;
+    pointer-events:none;
+  }
+  .cta-band::before{
+    width:280px; height:280px;
+    background:var(--gold);
+    top:-70px; left:6%;
+  }
+  .cta-band::after{
+    width:320px; height:320px;
+    background:var(--moss);
+    bottom:-80px; right:6%;
+  }
+  .cta-band-inner{
+    position:relative;
+    z-index:1;
+    background:linear-gradient(135deg, rgba(255,122,61,.55) 0%, rgba(225,96,31,.55) 100%);
+    backdrop-filter:blur(20px) saturate(160%);
+    -webkit-backdrop-filter:blur(20px) saturate(160%);
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:var(--radius-lg);
+    padding:64px 60px;
+    box-sizing:border-box;
+    width:100%;
+    display:flex; align-items:center; justify-content:space-between; gap:30px; flex-wrap:wrap;
+    color:#fff;
+    box-shadow:0 30px 70px -25px rgba(24,38,32,.4), inset 0 1px 0 rgba(255,255,255,.35);
+  }
+  .cta-band h2{ font-size:clamp(26px,3vw,36px); max-width:520px; color:#fff; }
+  .cta-band .btn-primary{ background:rgba(255,255,255,.92); color:var(--amber-deep); box-shadow:0 14px 30px -12px rgba(0,0,0,.25); backdrop-filter:blur(6px); }
+  .cta-band .btn-primary:hover{ background:var(--ink); color:#fff; }
+
+  footer.mini-footer{ padding:40px 0 60px; text-align:center; color:var(--ink-soft); font-size:13.5px; border-top:1px solid var(--line); }
+  footer.mini-footer a{ color:var(--amber-deep); font-weight:600; }
+
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  @media (max-width:960px){
+    .home-hero-inner{ grid-template-columns:1fr; }
+    .stack-stage{ height:400px; }
+    .process-grid{ grid-template-columns:1fr; }
+    .spotlight-card{ grid-template-columns:1fr; padding:36px; }
+    .spotlight-quote-mark{ display:none; }
+    .cta-band-inner{ flex-direction:column; text-align:center; padding:44px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="preloader" id="preloader">
+  <div class="preloader-inner">
+    <span class="preloader-logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5L12 3l8 3.5L12 10 4 6.5Z" fill="#DCEBC3"/><path d="M7 8.6v6.1c0 1.4 2.2 2.9 5 2.9s5-1.5 5-2.9V8.6" stroke="#DCEBC3" stroke-width="1.4" stroke-linecap="round"/><path d="M20 7v6" stroke="#FF7A3D" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+      Education Hub
+    </span>
+    <div class="preloader-bar-track">
+      <div class="preloader-bar-fill" id="preloaderFill"></div>
+    </div>
+    <span class="preloader-pct" id="preloaderPct">0%</span>
+  </div>
+</div>
+
+<script>
+(() => {
+  // Real preloader — progress reflects actual resource load, not a fake timer.
+  const preloader = document.getElementById('preloader');
+  const fill = document.getElementById('preloaderFill');
+  const pctEl = document.getElementById('preloaderPct');
+  if (!preloader) return;
+
+  function start() {
+    const images = Array.from(document.images);
+    const total = images.length;
+    let loadedCount = 0;
+    let displayed = 0;
+    let target = total === 0 ? 100 : 0;
+
+    function setProgress(p) {
+      if (fill) fill.style.width = p + '%';
+      if (pctEl) pctEl.textContent = Math.round(p) + '%';
+    }
+
+    function finish() {
+      preloader.classList.add('hide');
+      document.documentElement.classList.remove('is-loading');
+      setTimeout(() => preloader.remove(), 550);
+    }
+
+    // Rate tuned so the easing feels identical to the old per-frame version
+    // at 60Hz, but now scales correctly on 90Hz/120Hz displays too.
+    const EASE_RATE = 0.00975; // per millisecond
+    let lastTime = null;
+
+    function tick(now) {
+      if (lastTime === null) lastTime = now;
+      const dt = now - lastTime;
+      lastTime = now;
+      const factor = 1 - Math.exp(-EASE_RATE * dt);
+      displayed += (target - displayed) * factor;
+      if (target >= 100 && 100 - displayed < 0.3) {
+        setProgress(100);
+        finish();
+        return;
+      }
+      setProgress(displayed);
+      requestAnimationFrame(tick);
+    }
+
+    function bump() {
+      loadedCount++;
+      target = total ? (loadedCount / total) * 100 : 100;
+    }
+
+    images.forEach(img => {
+      if (img.complete && img.naturalWidth !== 0) bump();
+      else {
+        img.addEventListener('load', bump, { once: true });
+        img.addEventListener('error', bump, { once: true }); // failed image still counts, so a dead link can't stall the bar forever
+      }
+    });
+
+    // Safety net only — doesn't pad the timer, just guarantees the bar can't hang forever
+    // if some resource never fires load/error (e.g. blocked by an ad-blocker).
+    setTimeout(() => { target = 100; }, 8000);
+
+    requestAnimationFrame(tick);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+})();
+</script>
+
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="home.html" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5L12 3l8 3.5L12 10 4 6.5Z" fill="#DCEBC3"/><path d="M7 8.6v6.1c0 1.4 2.2 2.9 5 2.9s5-1.5 5-2.9V8.6" stroke="#DCEBC3" stroke-width="1.4" stroke-linecap="round"/><path d="M20 7v6" stroke="#FF7A3D" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+      Education Hub
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <section class="home-hero">
+    <div class="wrap home-hero-inner">
+      <div class="home-copy">
+        <p class="eyebrow">Online learning, made human</p>
+        <h1 class="kinetic-head">Learn to<br><span class="rotor" id="rotor">design</span>,<br>like a pro.</h1>
+        <p class="lede">Practical, project-based courses taught by people who still do the work. No filler modules — just the exact skills that get portfolios noticed and projects shipped.</p>
+        <div class="home-cta-row">
+          <a href="index.html#courses" class="btn btn-primary">
+            Browse Courses
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="index.html#categories" class="btn btn-outline">Explore Categories</a>
+        </div>
+        <div class="trust-row">
+          <div style="display:flex;">
+            <span class="stack-avatar"><img src="https://i.pravatar.cc/80?img=5" alt="Student"></span>
+            <span class="stack-avatar"><img src="https://i.pravatar.cc/80?img=9" alt="Student"></span>
+            <span class="stack-avatar"><img src="https://i.pravatar.cc/80?img=15" alt="Student"></span>
+            <span class="stack-avatar"><img src="https://i.pravatar.cc/80?img=20" alt="Student"></span>
+          </div>
+          <div class="trust-row-copy">
+            <div class="trust-row-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.6 4.3L18 21l-6-4.3L6 21l1.6-7.7L2 9h7l3-7Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.6 4.3L18 21l-6-4.3L6 21l1.6-7.7L2 9h7l3-7Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.6 4.3L18 21l-6-4.3L6 21l1.6-7.7L2 9h7l3-7Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.6 4.3L18 21l-6-4.3L6 21l1.6-7.7L2 9h7l3-7Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.6 4.3L18 21l-6-4.3L6 21l1.6-7.7L2 9h7l3-7Z"/></svg>
+            </div>
+            <strong>25,000+ learners</strong>
+            <span>rated their course 4.8/5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack-stage" id="stackStage">
+        <div class="stack-glow"></div>
+        <div class="stack-pin"><span class="dot"></span> 3 people enrolled today</div>
+        <div class="stack-3d" id="stack3d">
+          <div class="stack-card c1">
+            <div class="sc-top">
+              <span class="sc-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#DCEBC3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg></span>
+              <span class="sc-pct">38%</span>
+            </div>
+            <h4>UI Design Fundamentals</h4>
+            <div>
+              <div class="sc-bar"><div class="sc-bar-fill"></div></div>
+              <div class="sc-foot"><span>Module 3 of 8</span><span>6h left</span></div>
+            </div>
+          </div>
+          <div class="stack-card c2">
+            <div class="sc-top">
+              <span class="sc-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#182620" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></span>
+              <span class="sc-pct">71%</span>
+            </div>
+            <h4>JavaScript for Builders</h4>
+            <div>
+              <div class="sc-bar"><div class="sc-bar-fill"></div></div>
+              <div class="sc-foot"><span>Module 5 of 7</span><span>2h left</span></div>
+            </div>
+          </div>
+          <div class="stack-card c3">
+            <div class="sc-top">
+              <span class="sc-badge"><svg viewBox="0 0 24 24" fill="none" stroke="#1F4032" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+              <span class="sc-pct">92%</span>
+            </div>
+            <h4>Photography: Light &amp; Frame</h4>
+            <div>
+              <div class="sc-bar"><div class="sc-bar-fill"></div></div>
+              <div class="sc-foot"><span>Module 11 of 12</span><span>40m left</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="process">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">How it works</p>
+          <h2>From curious to capable in three moves.</h2>
+        </div>
+      </div>
+      <div class="process-grid">
+        <div class="process-card reveal">
+          <div class="process-num">01</div>
+          <h3>Pick a track</h3>
+          <p>Browse courses by category or search by the skill you actually need — no vague "beginner to advanced" filler.</p>
+        </div>
+        <div class="process-card reveal">
+          <div class="process-num">02</div>
+          <h3>Build in public</h3>
+          <p>Every course is project-based. You ship real work, not just watch someone else's screen recording.</p>
+        </div>
+        <div class="process-card reveal">
+          <div class="process-num">03</div>
+          <h3>Get real feedback</h3>
+          <p>Instructors who still work in the field review your projects and tell you what a hiring manager would say.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cat-strip-wrap">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Popular right now</p>
+          <h2>Jump into a category</h2>
+        </div>
+      </div>
+      <div class="cat-strip">
+        <a class="cat-chip" href="index.html#categories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/></svg> UI/UX Design</a>
+        <a class="cat-chip" href="index.html#categories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg> Web Development</a>
+        <a class="cat-chip" href="index.html#categories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/></svg> Mobile Apps</a>
+        <a class="cat-chip" href="index.html#categories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/></svg> Photography</a>
+        <a class="cat-chip" href="index.html#categories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg> Marketing</a>
+        <a class="cat-chip" href="index.html#categories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg> Music Production</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="spotlight">
+    <div class="wrap">
+      <div class="spotlight-card reveal">
+        <span class="spotlight-quote-mark">"</span>
+        <div class="spotlight-photo">
+          <img src="https://i.pravatar.cc/480?img=68" alt="Student portrait">
+          <span class="sp-tag">Hired in 4 months</span>
+        </div>
+        <div class="spotlight-copy">
+          <blockquote>I'd tried three other platforms before this. The difference was every instructor still ships client work — the feedback felt like a senior designer looking at my file, not a rubric.</blockquote>
+          <div class="sp-name">
+            <strong>Ananya Rao</strong>
+            <span>UI Design track · now Product Designer at a Series B startup</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band wrap">
+    <div class="cta-band-inner reveal">
+      <h2>Your next skill is one course away.</h2>
+      <a href="index.html#courses" class="btn btn-primary">
+        Start Learning
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="mini-footer">
+  © 2026 Education Hub
+</footer>
+
+<script>
+  // Rotating headline word
+  const words = ['design','code','shoot','write','build'];
+  const rotor = document.getElementById('rotor');
+  let wi = 0;
+  function nextWord(){
+    rotor.innerHTML = '<span class="word">' + words[wi] + '</span>';
+    wi = (wi + 1) % words.length;
+  }
+  nextWord();
+  setInterval(nextWord, 2200);
+
+  // Tilt on the stacked card stage
+  const stage = document.getElementById('stackStage');
+  const stack3d = document.getElementById('stack3d');
+  if (stage && window.matchMedia('(hover: hover)').matches){
+    stage.addEventListener('mousemove', (e) => {
+      const r = stage.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      stack3d.style.transform = `rotateY(${px * 16}deg) rotateX(${-py * 16}deg)`;
+    });
+    stage.addEventListener('mouseleave', () => {
+      stack3d.style.transform = 'rotateY(0) rotateX(0)';
+    });
+  }
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) en.target.classList.add('in-view'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Sticky nav shadow
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  });
+</script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="is-loading">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,20 +9,6 @@
 </head>
 <body>
 
-<div class="preloader" id="preloader">
-  <div class="preloader-inner">
-    <span class="preloader-logo">
-      <span class="logo-mark">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5L12 3l8 3.5L12 10 4 6.5Z" fill="#DCEBC3"/><path d="M7 8.6v6.1c0 1.4 2.2 2.9 5 2.9s5-1.5 5-2.9V8.6" stroke="#DCEBC3" stroke-width="1.4" stroke-linecap="round"/><path d="M20 7v6" stroke="#FF7A3D" stroke-width="1.6" stroke-linecap="round"/></svg>
-      </span>
-      Education Hub
-    </span>
-    <div class="preloader-bar-track">
-      <div class="preloader-bar-fill" id="preloaderFill"></div>
-    </div>
-    <span class="preloader-pct" id="preloaderPct">0%</span>
-  </div>
-</div>
 
 <header class="nav" id="nav">
   <div class="nav-inner">
@@ -32,19 +18,6 @@
       </span>
       Education Hub
     </a>
-
-    <nav class="nav-links" id="navLinks">
-      <a href="#top" class="active">Home</a>
-      <a href="#courses">Courses</a>
-      <a href="#articles">Blog</a>
-      <a href="#categories">Categories</a>
-      <a href="#team">Team</a>
-      <a href="#footer">Contact</a>
-      <div class="mobile-search-wrap">
-        <input type="text" id="mobileSearchInput" placeholder="Search courses, topics..." aria-label="Search courses">
-      </div>
-      <a href="#" class="mobile-login-link" id="mobileLoginTrigger">Login / Register</a>
-    </nav>
 
     <div class="nav-actions">
       <a href="#" class="login-link" id="loginTrigger">Login / Register</a>
@@ -59,6 +32,18 @@
     </div>
   </div>
 </header>
+<nav class="nav-links" id="navLinks">
+  <a href="#top" class="active">Home</a>
+  <a href="#courses">Courses</a>
+  <a href="#articles">Blog</a>
+  <a href="#categories">Categories</a>
+  <a href="#team">Team</a>
+  <a href="#contact">Contact</a>
+  <div class="mobile-search-wrap">
+    <input type="text" id="mobileSearchInput" placeholder="Search courses, topics..." aria-label="Search courses">
+  </div>
+  <a href="#" class="mobile-login-link" id="mobileLoginTrigger">Login / Register</a>
+</nav>
 
 <main id="top">
 
@@ -326,7 +311,7 @@
 
       <div class="courses-grid" id="coursesGrid">
 
-                <article class="course-card reveal" data-cat="Development" data-desc="Set up LearnPress from zero, structure your lessons, and ship a working course marketplace by the end of week two.">
+                <article class="course-card reveal" data-cat="Development" data-desc="Set up a CI/CD pipeline that tests and deploys your app automatically every time you push to main.">
           <div class="course-thumb">
             <span class="course-tag">Development</span>
             <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
@@ -347,7 +332,7 @@
           </div>
           <div class="course-body">
             <div class="course-author">by <b>Meera Anand</b></div>
-            <h3 class="course-title">Build a Learning Site with LearnPress</h3>
+            <h3 class="course-title">Automating Deploys with GitHub Actions</h3>
             <div class="course-meta">
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>2 Weeks</span>
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>156 Students</span>
@@ -359,7 +344,7 @@
           </div>
         </article>
 
-                <article class="course-card reveal" data-cat="Development" data-desc="Customize a ThimPress storefront theme end to end — layout, product blocks and checkout flow — no prior theming experience needed.">
+                <article class="course-card reveal" data-cat="Development" data-desc="Learn a repeatable process for untangling old code safely — tests first, small steps, no big-bang rewrites.">
           <div class="course-thumb">
             <span class="course-tag">Development</span>
             <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
@@ -375,7 +360,7 @@
           </div>
           <div class="course-body">
             <div class="course-author">by <b>Meera Anand</b></div>
-            <h3 class="course-title">Design a Storefront with ThimPress</h3>
+            <h3 class="course-title">Refactoring Legacy Codebases</h3>
             <div class="course-meta">
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>3 Weeks</span>
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>210 Students</span>
@@ -387,7 +372,7 @@
           </div>
         </article>
 
-                <article class="course-card reveal" data-cat="Content Writing" data-desc="Learn how spacing, hierarchy and font pairing change readability inside real reading apps, with before/after teardown exercises.">
+                <article class="course-card reveal" data-cat="Content Writing" data-desc="Turn confusing internal notes into documentation your users and teammates will actually read and trust.">
           <div class="course-thumb">
             <span class="course-tag">Writing</span>
             <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
@@ -406,7 +391,7 @@
           </div>
           <div class="course-body">
             <div class="course-author">by <b>Rohit Sen</b></div>
-            <h3 class="course-title">Typography for Reading Apps</h3>
+            <h3 class="course-title">Writing Clear Product Docs</h3>
             <div class="course-meta">
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>2 Weeks</span>
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>98 Students</span>
@@ -418,7 +403,7 @@
           </div>
         </article>
 
-                <article class="course-card reveal" data-cat="Photography" data-desc="Master three-point lighting setups for portraits using gear you likely already own, plus a mock shoot with instructor feedback.">
+                <article class="course-card reveal" data-cat="Photography" data-desc="Time your outdoor shoots around natural light and use simple reflectors to get warm, flattering portraits.">
           <div class="course-thumb">
             <span class="course-tag">Photography</span>
             <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
@@ -434,7 +419,7 @@
           </div>
           <div class="course-body">
             <div class="course-author">by <b>Alia Ferreira</b></div>
-            <h3 class="course-title">Portrait Lighting Basics</h3>
+            <h3 class="course-title">Shooting in Golden Hour Light</h3>
             <div class="course-meta">
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>4 Weeks</span>
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>142 Students</span>
@@ -446,7 +431,7 @@
           </div>
         </article>
 
-                <article class="course-card reveal" data-cat="Development" data-desc="A one-week sprint on shortcuts, window management and editor speed-ups that cuts real repetitive work down to minutes.">
+                <article class="course-card reveal" data-cat="Development" data-desc="Write practical unit and integration tests for a REST API so bugs get caught before your users find them.">
           <div class="course-thumb">
             <span class="course-tag">Development</span>
             <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
@@ -462,7 +447,7 @@
           </div>
           <div class="course-body">
             <div class="course-author">by <b>Meera Anand</b></div>
-            <h3 class="course-title">Keyboard-First Productivity</h3>
+            <h3 class="course-title">Testing Your API Endpoints</h3>
             <div class="course-meta">
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>1 Week</span>
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>87 Students</span>
@@ -474,7 +459,7 @@
           </div>
         </article>
 
-                <article class="course-card reveal" data-cat="Communication" data-desc="Fix pacing, filler words and eye contact through recorded mock sessions reviewed live with an instructor, not a checklist.">
+                <article class="course-card reveal" data-cat="Communication" data-desc="Cut meeting time in half with better agendas, clear owners, and a habit of ending with next steps.">
           <div class="course-thumb">
             <span class="course-tag">Communication</span>
             <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
@@ -489,7 +474,7 @@
           </div>
           <div class="course-body">
             <div class="course-author">by <b>Daniel Cruz</b></div>
-            <h3 class="course-title">Public Speaking on Camera</h3>
+            <h3 class="course-title">Running Meetings People Actually Like</h3>
             <div class="course-meta">
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>3 Weeks</span>
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>176 Students</span>
@@ -501,7 +486,7 @@
           </div>
         </article>
 
-                <article class="course-card reveal" data-cat="Marketing" data-desc="Cover acquisition channels, basic funnel math and one real campaign brief you build and critique with the cohort.">
+                <article class="course-card reveal" data-cat="Marketing" data-desc="Plan a month of content in one sitting using a simple system that keeps you consistent without burning out.">
           <div class="course-thumb">
             <span class="course-tag">Marketing</span>
             <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
@@ -517,7 +502,7 @@
           </div>
           <div class="course-body">
             <div class="course-author">by <b>Daniel Cruz</b></div>
-            <h3 class="course-title">Growth Marketing Fundamentals</h3>
+            <h3 class="course-title">Building a Content Calendar That Sticks</h3>
             <div class="course-meta">
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>3 Weeks</span>
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>121 Students</span>
@@ -529,7 +514,7 @@
           </div>
         </article>
 
-                <article class="course-card reveal" data-cat="Finance" data-desc="Set up invoicing, tax buffers and a simple monthly budget built specifically around irregular freelance income.">
+                <article class="course-card reveal" data-cat="Finance" data-desc="Figure out what to charge as a freelancer using a simple formula that accounts for taxes, downtime, and growth.">
           <div class="course-thumb">
             <span class="course-tag">Finance</span>
             <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
@@ -545,7 +530,7 @@
           </div>
           <div class="course-body">
             <div class="course-author">by <b>Rohit Sen</b></div>
-            <h3 class="course-title">Personal Finance for Freelancers</h3>
+            <h3 class="course-title">Freelance Rate Setting Basics</h3>
             <div class="course-meta">
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>2 Weeks</span>
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>93 Students</span>
@@ -557,7 +542,7 @@
           </div>
         </article>
 
-                <article class="course-card reveal" data-cat="Art &amp; Design" data-desc="Explore color theory and composition through five short daily exercises, ending with one polished digital illustration.">
+                <article class="course-card reveal" data-cat="Art &amp; Design" data-desc="Build a daily 10-minute sketching habit that helps you generate and communicate design ideas quickly.">
           <div class="course-thumb">
             <span class="course-tag">Art &amp; Design</span>
             <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
@@ -573,7 +558,7 @@
           </div>
           <div class="course-body">
             <div class="course-author">by <b>Meera Anand</b></div>
-            <h3 class="course-title">Color & Composition Basics</h3>
+            <h3 class="course-title">Sketching Ideas Fast</h3>
             <div class="course-meta">
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>1 Week</span>
               <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>134 Students</span>
@@ -620,7 +605,7 @@
     <div class="wrap">
       <div class="stats-band reveal">
         <div class="stat-item"><div class="stat-num" data-target="25" data-suffix="K+">0</div><div class="stat-label">Active Students</div></div>
-        <div class="stat-item"><div class="stat-num" data-target="899" data-suffix="">0</div><div class="stat-label">Total Courses</div></div>
+        <div class="stat-item"><div class="stat-num" data-target="150" data-suffix="+">0</div><div class="stat-label">Total Courses</div></div>
         <div class="stat-item"><div class="stat-num" data-target="158" data-suffix="">0</div><div class="stat-label">Instructors</div></div>
         <div class="stat-item"><div class="stat-num" data-target="100" data-suffix="%">0</div><div class="stat-label">Satisfaction Rate</div></div>
       </div>
@@ -888,9 +873,65 @@
     <div class="wrap">
       <div class="newsletter reveal">
         <h3>Get one useful course tip in your inbox, every other Tuesday.</h3>
-        <form class="news-form" onsubmit="return false;">
-          <input type="email" placeholder="you@email.com" required>
+        <form class="news-form" id="newsletterForm">
+          <input type="email" id="newsletterEmail" placeholder="you@email.com" required>
           <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+        <p id="newsletterMsg" class="news-msg" hidden></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact Section ── -->
+  <section class="section contact-section" id="contact">
+    <div class="wrap">
+      <div class="contact-inner">
+        <div class="contact-info reveal">
+          <p class="eyebrow">Get in touch</p>
+          <h2>We'd love to hear from you.</h2>
+          <p class="contact-sub">Have a question about a course, instructor partnerships, or anything else? Send us a message and we'll respond within 24 hours.</p>
+          <ul class="contact-detail-list">
+            <li>
+              <span class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>
+              </span>
+              hello@educationhub.io
+            </li>
+            <li>
+              <span class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.1-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z"/></svg>
+              </span>
+              +1 (212) 555-0142
+            </li>
+            <li>
+              <span class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
+              Hudson Yards, New York, USA
+            </li>
+          </ul>
+        </div>
+
+        <form class="contact-form reveal" id="contactForm">
+          <div class="contact-row">
+            <div class="contact-field">
+              <label for="contactName">Your Name</label>
+              <input type="text" id="contactName" placeholder="Jane Doe" required>
+            </div>
+            <div class="contact-field">
+              <label for="contactEmail">Email Address</label>
+              <input type="email" id="contactEmail" placeholder="you@example.com" required>
+            </div>
+          </div>
+          <div class="contact-field">
+            <label for="contactMessage">Message</label>
+            <textarea id="contactMessage" rows="5" placeholder="Tell us how we can help…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary contact-submit">
+            Send Message
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg>
+          </button>
+          <p id="contactMsg" class="contact-msg" hidden></p>
         </form>
       </div>
     </div>
@@ -919,9 +960,9 @@
       <div class="footer-help">
         <div class="foot-title">Get Help</div>
         <ul class="foot-links">
-          <li><a href="#">Contact Us</a></li>
-          <li><a href="#">FAQs</a></li>
-          <li><a href="#">Support Center</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#faq">FAQs</a></li>
+          <li><a href="#contact">Support Center</a></li>
           <li><a href="#">Terms of Service</a></li>
         </ul>
       </div>
@@ -929,10 +970,10 @@
       <div class="footer-programs">
         <div class="foot-title">Programs</div>
         <ul class="foot-links">
-          <li><a href="#">Art &amp; Design</a></li>
-          <li><a href="#">Development</a></li>
-          <li><a href="#">Marketing</a></li>
-          <li><a href="#">Photography</a></li>
+          <li><a href="#categories">Art &amp; Design</a></li>
+          <li><a href="#categories">Development</a></li>
+          <li><a href="#categories">Marketing</a></li>
+          <li><a href="#categories">Photography</a></li>
         </ul>
       </div>
 
@@ -941,7 +982,7 @@
         <ul class="foot-contact">
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-            2321 New Design Str, Lorem Ipsum10, Hudson Yards, USA
+            2321 New Design Str, Hudson Yards, New York, USA
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.1-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z"/></svg>
@@ -988,30 +1029,32 @@
     </div>
 
     <form class="auth-form" id="loginForm">
+      <p class="auth-msg" id="loginMsg" hidden></p>
       <label class="auth-field">
         <span>Email</span>
-        <input type="email" placeholder="you@example.com" required>
+        <input type="email" id="loginEmail" placeholder="you@example.com" required>
       </label>
       <label class="auth-field">
         <span>Password</span>
-        <input type="password" placeholder="••••••••" required>
+        <input type="password" id="loginPassword" placeholder="••••••••" required>
       </label>
       <a href="#" class="auth-forgot">Forgot password?</a>
       <button type="submit" class="btn btn-primary auth-submit">Log In</button>
     </form>
 
     <form class="auth-form" id="registerForm" hidden>
+      <p class="auth-msg" id="registerMsg" hidden></p>
       <label class="auth-field">
         <span>Full name</span>
-        <input type="text" placeholder="Your name" required>
+        <input type="text" id="registerName" placeholder="Your name" required>
       </label>
       <label class="auth-field">
         <span>Email</span>
-        <input type="email" placeholder="you@example.com" required>
+        <input type="email" id="registerEmail" placeholder="you@example.com" required>
       </label>
       <label class="auth-field">
         <span>Password</span>
-        <input type="password" placeholder="Create a password" required>
+        <input type="password" id="registerPassword" placeholder="Create a password" minlength="6" required>
       </label>
       <button type="submit" class="btn btn-primary auth-submit">Create Account</button>
     </form>
@@ -1023,11 +1066,11 @@
 
     <div class="auth-divider"><span>or continue with</span></div>
     <div class="auth-social">
-      <button type="button" class="auth-social-btn">
+      <button type="button" class="auth-social-btn" data-provider="google">
         <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.1.8 3.9 1.5l2.6-2.5C16.9 3.4 14.7 2.4 12 2.4 6.9 2.4 2.8 6.5 2.8 11.6S6.9 20.8 12 20.8c6.9 0 8.9-4.9 8.9-7.4 0-.5-.05-.9-.12-1.3H12Z"/></svg>
         Google
       </button>
-      <button type="button" class="auth-social-btn">
+      <button type="button" class="auth-social-btn" data-provider="github">
         <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.5c.5.1.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.1.39-2 1.03-2.7-.1-.25-.45-1.28.1-2.66 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.9-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.41.1 2.66.64.7 1.03 1.6 1.03 2.7 0 3.84-2.34 4.68-4.58 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
         GitHub
       </button>
@@ -5512,6 +5555,8 @@
     </div>
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+<script src="supabase-config.js" defer></script>
 <script src="script.js" defer></script>
 
 </body>

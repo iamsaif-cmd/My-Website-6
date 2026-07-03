@@ -14,59 +14,6 @@
     lastTapTime = now;
   }, { passive: false });
 
-  const preloader = document.getElementById('preloader');
-  const preloaderFill = document.getElementById('preloaderFill');
-  const preloaderPct = document.getElementById('preloaderPct');
-
-  let displayed = 0;
-  let target = 0;
-  let loaded = false;
-  let rafId = null;
-  let lastTick = null;
-
-  function setProgress(pct) {
-    if (preloaderFill) preloaderFill.style.width = pct + '%';
-    if (preloaderPct) preloaderPct.textContent = Math.round(pct) + '%';
-  }
-
-  function tick(now) {
-    const dt = lastTick == null ? 16.67 : now - lastTick;
-    lastTick = now;
-    const pull = 1 - Math.pow(1 - 0.08, dt / 16.67);
-    displayed += (target - displayed) * pull;
-    if (target - displayed < 0.3) displayed = target;
-    setProgress(displayed);
-    if (displayed < 100) {
-      rafId = requestAnimationFrame(tick);
-    } else {
-      rafId = null;
-      finishPreload();
-    }
-  }
-
-  function nudgeTarget() {
-    if (loaded) return;
-    target = Math.min(target + (100 - target) * 0.15, 90);
-    setTimeout(nudgeTarget, 220);
-  }
-
-  function finishPreload() {
-    if (!preloader) return;
-    preloader.classList.add('hide');
-    document.documentElement.classList.remove('is-loading');
-    setTimeout(() => preloader.remove(), 550);
-  }
-
-  nudgeTarget();
-  rafId = requestAnimationFrame(tick);
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      loaded = true;
-      target = 100;
-    }, 2000);
-  });
-  setTimeout(() => { loaded = true; target = 100; }, 6000);
-
   const nav = document.getElementById('nav');
   const toTop = document.getElementById('toTop');
   const onScroll = () => {
@@ -315,6 +262,8 @@
     authSwitchRegister.hidden = tab !== 'register';
     authTitle.textContent = authCopy[tab].title;
     authSub.textContent = authCopy[tab].sub;
+    document.getElementById('loginMsg').hidden = true;
+    document.getElementById('registerMsg').hidden = true;
   }
 
   function openAuthModal(tab) {
@@ -332,14 +281,175 @@
     if (authLastFocused) authLastFocused.focus();
   }
 
-  loginTrigger.addEventListener('click', (e) => { e.preventDefault(); openAuthModal('login'); });
+  loginTrigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (loginTrigger.dataset.mode === 'logout') {
+      if (supabaseClient) supabaseClient.auth.signOut();
+      updateAuthUI(null);
+    } else {
+      openAuthModal('login');
+    }
+  });
   authTabs.forEach(tab => tab.addEventListener('click', () => setAuthTab(tab.dataset.tab)));
   authModal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeAuthModal));
   authModal.querySelectorAll('[data-switch]').forEach(el => el.addEventListener('click', () => setAuthTab(el.dataset.switch)));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && authModal.classList.contains('open')) closeAuthModal(); });
-  [loginForm, registerForm].forEach(form => {
-    form.addEventListener('submit', (e) => e.preventDefault());
+
+  function showAuthMsg(el, text, isError) {
+    el.textContent = text;
+    el.hidden = false;
+    el.classList.toggle('auth-msg-error', !!isError);
+    el.classList.toggle('auth-msg-success', !isError);
+  }
+
+  function setSubmitLoading(form, loading, label) {
+    const btn = form.querySelector('.auth-submit');
+    if (loading) {
+      btn.dataset.label = btn.textContent;
+      btn.textContent = 'Please wait…';
+      btn.disabled = true;
+    } else {
+      btn.textContent = label || btn.dataset.label || btn.textContent;
+      btn.disabled = false;
+    }
+  }
+
+  function updateAuthUI(user) {
+    if (user) {
+      const displayName = (user.user_metadata && user.user_metadata.full_name) || user.email.split('@')[0];
+      loginTrigger.textContent = `Hi, ${displayName} · Logout`;
+      loginTrigger.dataset.mode = 'logout';
+    } else {
+      loginTrigger.textContent = 'Login / Register';
+      loginTrigger.dataset.mode = 'login';
+    }
+  }
+
+  // Restore session on page load
+  if (supabaseClient) {
+    supabaseClient.auth.getSession().then(({ data }) => {
+      updateAuthUI(data.session ? data.session.user : null);
+    });
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      updateAuthUI(session ? session.user : null);
+    });
+  }
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('loginMsg');
+    msg.hidden = true;
+    if (!supabaseClient) { showAuthMsg(msg, 'Backend not configured.', true); return; }
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    setSubmitLoading(loginForm, true);
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    setSubmitLoading(loginForm, false, 'Log In');
+    if (error) { showAuthMsg(msg, error.message, true); return; }
+    updateAuthUI(data.user);
+    closeAuthModal();
+    loginForm.reset();
   });
+
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('registerMsg');
+    msg.hidden = true;
+    if (!supabaseClient) { showAuthMsg(msg, 'Backend not configured.', true); return; }
+    const fullName = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    setSubmitLoading(registerForm, true);
+    const { data, error } = await supabaseClient.auth.signUp({
+      email, password,
+      options: { data: { full_name: fullName } }
+    });
+    setSubmitLoading(registerForm, false, 'Create Account');
+    if (error) { showAuthMsg(msg, error.message, true); return; }
+    if (data.session) {
+      updateAuthUI(data.user);
+      closeAuthModal();
+    } else {
+      showAuthMsg(msg, 'Account created! Check your email to confirm.', false);
+    }
+    registerForm.reset();
+  });
+
+  document.querySelectorAll('.auth-social-btn[data-provider]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!supabaseClient) return;
+      const provider = btn.dataset.provider;
+      const { error } = await supabaseClient.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: window.location.href }
+      });
+      if (error) {
+        const activeTab = authTabsWrap.dataset.active;
+        showAuthMsg(document.getElementById(activeTab === 'login' ? 'loginMsg' : 'registerMsg'), error.message, true);
+      }
+    });
+  });
+
+  // ── Newsletter signup → saves to newsletter_signups table ──
+  const newsletterForm = document.getElementById('newsletterForm');
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const emailInput = document.getElementById('newsletterEmail');
+      const msgEl = document.getElementById('newsletterMsg');
+      const btn = newsletterForm.querySelector('button[type="submit"]');
+      const email = emailInput.value.trim();
+      if (!email) return;
+      btn.disabled = true;
+      btn.textContent = 'Subscribing…';
+      if (supabaseClient) {
+        const { error } = await supabaseClient.from('newsletter_signups').insert({ email });
+        msgEl.hidden = false;
+        if (error && error.code === '23505') {
+          msgEl.textContent = "You're already subscribed!";
+          msgEl.className = 'news-msg news-msg-info';
+        } else if (error) {
+          msgEl.textContent = 'Something went wrong — please try again.';
+          msgEl.className = 'news-msg news-msg-error';
+        } else {
+          msgEl.textContent = '🎉 You\'re in! See you every other Tuesday.';
+          msgEl.className = 'news-msg news-msg-success';
+          emailInput.value = '';
+        }
+      }
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    });
+  }
+
+  // ── Contact form → saves to contact_messages table ──
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+      const msgEl = document.getElementById('contactMsg');
+      const btn = contactForm.querySelector('.contact-submit');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      if (supabaseClient) {
+        const { error } = await supabaseClient.from('contact_messages').insert({ name, email, message });
+        msgEl.hidden = false;
+        if (error) {
+          msgEl.textContent = 'Something went wrong — please try again.';
+          msgEl.className = 'contact-msg contact-msg-error';
+        } else {
+          msgEl.textContent = "Message sent! We'll get back to you within 24 hours.";
+          msgEl.className = 'contact-msg contact-msg-success';
+          contactForm.reset();
+        }
+      }
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+    });
+  }
 
   const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
